@@ -525,13 +525,32 @@
     if (ctx.menu.select_keys) {
       labels = @(ctx.menu.select_keys);
     }
-    [self showPanelWithPreedit:(_inlinePreedit ? nil : preeditText)
-                      selRange:selRange
-                      caretPos:caretPos
-                    candidates:candidates
-                      comments:comments
-                        labels:labels
-                   highlighted:ctx.menu.highlighted_candidate_index];
+
+    // 默认显示
+    Bool showCandidate = YES;
+    
+    // 读取配置文件是否配置了隐藏候选框
+    Bool hideCandidate = rime_get_api()->get_option(_session, "hide_candidate");
+    if (hideCandidate) {
+      // 保证选则方案的时候会显示出候选框
+      // 此处需要注意『〔方案選單〕 』，暂未确定是否固定
+      // 可能是由 switcher 中的 caption 确定
+      Bool isSwitch = ctx.composition.preedit &&
+        [[NSString stringWithUTF8String:ctx.composition.preedit] isEqualToString:@"〔方案選單〕 "];
+      // 其他输入长度为0的事件
+      Bool isCommand = ctx.composition.length == 0;
+      showCandidate = isSwitch || isCommand;
+    }
+    
+    if (showCandidate) {
+      [self showPanelWithPreedit:(_inlinePreedit ? nil : preeditText)
+                        selRange:selRange
+                        caretPos:caretPos
+                      candidates:candidates
+                        comments:comments
+                          labels:labels
+                     highlighted:ctx.menu.highlighted_candidate_index];
+    }
     rime_get_api()->free_context(&ctx);
   } else {
     [NSApp.squirrelAppDelegate.panel hide];
