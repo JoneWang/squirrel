@@ -10,6 +10,20 @@
 
 ### 如何使用
 
+在 [Releases](https://github.com/JoneWang/squirrel/releases) 中下载最新的二进制包，并将 Squirrel 移动到『/Library/Input Methods』目录：
+
+```bash
+mv Squirrel.app /Library/Input\ Methods/
+```
+
+在输入设置中，中文输入添加 Squirrel 后即可使用（运行后可能会需要在安全设置中允许打开）。
+
+***或手动编译安装***
+
+clone 后，按[此流程编译安装](https://github.com/JoneWang/squirrel/blob/hide_candidate/INSTALL.md)。
+
+
+
 打开 Squirrel 当前方案的配置文件，在 switches 中增加 hide_candidate，如下：
 
 ```yaml
